@@ -1,0 +1,40 @@
+{
+  "name": "preplay-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Abhilekh",
+  "license": "ISC",
+  "dependencies": {
+    "": "file:",
+    "axios": "^1.7.4",
+    "bcrypt": "^5.1.1",
+    "connect-multiparty": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.19.2",
+    "express-fileupload": "^1.5.0",
+    "glob": "^10.3.10",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.4",
+    "multer": "^1.4.5-lts.1",
+    "pino": "^8.17.2",
+    "preplay-back": "file:",
+    "rimraf": "^5.0.5",
+    "styled-components": "^6.1.13"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "jest": "^29.7.0",
+    "mocha": "^10.7.3",
+    "mongodb-memory-server": "^10.0.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  }
+}
