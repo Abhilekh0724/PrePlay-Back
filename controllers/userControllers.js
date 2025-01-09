@@ -95,12 +95,23 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
     res.status(200).json({
       success: true,
       message: "Login successful.",
       token,
-      userData: { id: user._id, email: user.email, firstName: user.firstName, lastName: user.lastName },
+      userData: {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isAdmin: user.isAdmin, // Include isAdmin in the response
+      },
     });
   } catch (error) {
     res.status(500).json({
