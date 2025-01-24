@@ -1,16 +1,15 @@
 // models/reviewModels.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Define the review schema
 const reviewSchema = new mongoose.Schema({
-  categoryId: {
+  productId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category', // Ensure this is correct
+    ref: "Product", // Reference to Product model
     required: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User", // Reference to User model
     required: true,
   },
   comment: {
@@ -25,9 +24,8 @@ const reviewSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now, // Automatically sets the current date and time
+    default: Date.now,
   },
 });
 
-// Create and export the Review model
-module.exports = mongoose.model('Review', reviewSchema);
+module.exports = mongoose.model("Review", reviewSchema);

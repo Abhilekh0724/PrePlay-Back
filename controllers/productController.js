@@ -85,6 +85,88 @@ const createProduct = async (req, res) => {
   }
 };
 
+// Get all products
+const getAllProducts = async (req, res) => {
+  try {
+    console.log('Fetching all products'); // Debug log
+    const products = await Product.find({});
+    console.log('Products fetched:', products); // Debug log
+
+    res.status(200).json({
+      success: true,
+      message: "Products fetched successfully!",
+      data: products,
+    });
+  } catch (error) {
+    console.error('Error fetching products:', error); // Debug log
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+// Search products
+const searchProducts = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query is required!",
+      });
+    }
+
+    const products = await Product.find({
+      name: { $regex: query, $options: 'i' }, // Case-insensitive search
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Products searched successfully!",
+      data: products,
+    });
+  } catch (error) {
+    console.error('Error searching products:', error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+// Get a product by ID
+const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product fetched successfully!",
+      data: product,
+    });
+  } catch (error) {
+    console.error('Error fetching product by ID:', error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 // Update a product
 const updateProduct = async (req, res) => {
   try {
@@ -172,27 +254,6 @@ const updateProduct = async (req, res) => {
     });
   }
 };
-const getAllProducts = async (req, res) => {
-  try {
-    console.log('Fetching all products'); // Debug log
-    const products = await Product.find({});
-    console.log('Products fetched:', products); // Debug log
-
-    res.status(200).json({
-      success: true,
-      message: "Products fetched successfully!",
-      data: products,
-    });
-  } catch (error) {
-    console.error('Error fetching products:', error); // Debug log
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
-  }
-};
-
 
 // Delete a product
 const deleteProduct = async (req, res) => {
@@ -225,6 +286,8 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   createProduct,
   getAllProducts,
+  searchProducts, // Added searchProducts
+  getProductById, // Added getProductById
   updateProduct,
   deleteProduct,
 };

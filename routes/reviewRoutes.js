@@ -1,12 +1,12 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const reviewController = require('../controllers/reviewController');
+const reviewController = require("../controllers/reviewController");
 const { authGuard } = require("../middleware/authGuard");
 
-// Route to create a review
-router.post('/', authGuard, reviewController.createReview);
+// Create a review for a product
+router.post("/", authGuard, reviewController.createReview);
 
-// Route to get reviews for a category
-router.get('/:categoryId', reviewController.getReviewsByCategory);
+// Get reviews for a specific product
+router.get("/:productId", reviewController.getReviewsByProduct);
 
 module.exports = router;

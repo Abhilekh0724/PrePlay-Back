@@ -1,5 +1,16 @@
 const jwt = require('jsonwebtoken');
 
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      isAdmin: user.isAdmin,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '3650d' } // Token expires in 1 year
+  );
+};
+
 const authGuard = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -22,9 +33,16 @@ const authGuard = (req, res, next) => {
   try {
     const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decodedUser;
-    console.log('Decoded user:', decodedUser);
+    console.log('Decoded User:', decodedUser);
     next();
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({
+        success: false,
+        message: 'Token expired. Please log in again.',
+        expiredAt: error.expiredAt,
+      });
+    }
     console.log(error);
     res.status(400).json({
       success: false,
@@ -64,6 +82,13 @@ const adminGuard = (req, res, next) => {
     }
     next();
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({
+        success: false,
+        message: 'Token expired. Please log in again.',
+        expiredAt: error.expiredAt,
+      });
+    }
     console.log(error);
     res.status(400).json({
       success: false,
@@ -73,6 +98,7 @@ const adminGuard = (req, res, next) => {
 };
 
 module.exports = {
+  generateToken, // Export generateToken
   authGuard,
   adminGuard,
 };

@@ -54,7 +54,7 @@ const connectDb = require('./database/database');
 const cors = require('cors');
 const fileupload = require('express-fileupload');
 const path = require('path');
-const crypto = require('node:crypto');
+
 
 // Load environment variables
 dotenv.config();
@@ -74,6 +74,7 @@ app.use(
 );
 
 // Routes
+app.use('/api/esewa', require('./routes/esewaRoutes'));
 app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/profile', require('./routes/profileRoutes'));
 app.use('/api/product', require('./routes/productRoutes'));
@@ -88,12 +89,21 @@ if (require.main === module) {
   
   // Connect to MongoDB and then start the server
   connectDb().then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
+    const server = app.listen(PORT)
+      .on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+          console.log(`Port ${PORT} is busy, trying ${PORT + 1}`);
+          server.listen(PORT + 1);
+        } else {
+          console.error('Server error:', err);
+        }
+      })
+      .on('listening', () => {
+        console.log(`Server is running on port ${server.address().port}`);
+      });
   }).catch((error) => {
     console.error('Failed to connect to MongoDB:', error);
-    process.exit(1);
+    process.exit(1);  
   });
 }
 
